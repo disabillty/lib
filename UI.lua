@@ -8,8 +8,6 @@ local Http = g:GetService("HttpService")
 local twn = TweenInfo.new(.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 local c30, c40, c60, wh = Color3.fromRGB(30,30,30), Color3.fromRGB(40,40,40), Color3.fromRGB(60,60,60), Color3.new(1,1,1)
 local pad, btnH = UDim.new(0,4), 28
-
--- Remove old UI
 for _, v in pairs(cg:GetChildren()) do if v.Name == "[/\\/]" then v:Destroy() end end
 local gUI = Instance.new("ScreenGui")
 gUI.Name = "[/\\/]"
@@ -182,8 +180,6 @@ function L:Window(title, size, pos)
 
     return o
 end
-
--- Automatically create Config window when library loads
 local ConfigW = L:Window("Config", UDim2.new(0,150,0,30), UDim2.new(.1,0,.1,0))
 ConfigW:Button("Unload", function()
     if L.gUI then
@@ -191,11 +187,12 @@ ConfigW:Button("Unload", function()
         L.Cleanup()
     end
 end)
-ConfigW:Toggle("Show UI", function(state)
+local showUIToggle = ConfigW:Toggle("Show UI", function(state)
     if L.gUI then
         L.gUI.Enabled = state
     end
 end)
+showUIToggle.Text = "[X] Show UI"
 ConfigW:Button("Save Config", function()
     L.SaveConfig()
 end)
