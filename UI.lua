@@ -182,7 +182,17 @@ function L:Window(title, size, pos)
 
     return o
 end
+
+-- Automatically create Config window when library loads
 local ConfigW = L:Window("Config", UDim2.new(0,150,0,30), UDim2.new(.1,0,.1,0))
-ConfigW:Button("Unload", function()if L.gUI then L.gUI:Destroy() L.Cleanup()end end)
-ConfigW:Button("Save Config", function() L.SaveConfig() end)
+ConfigW:Button("Unload", function()
+    if L.gUI then
+        L.gUI:Destroy()
+        L.Cleanup()
+    end
+end)
+ConfigW:Button("Save Config", function()
+    L.SaveConfig()
+end)
+
 return L
