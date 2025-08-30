@@ -195,7 +195,7 @@ ConfigW:Toggle("Show UI", function(state)
     if L.gUI then
         L.gUI.Enabled = state
     end
-end):Text="Show UI"
+end)
 ConfigW:Button("Save Config", function()
     L.SaveConfig()
 end)
