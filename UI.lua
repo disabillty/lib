@@ -180,7 +180,7 @@ function L:Window(title, size, pos)
 
     return o
 end
-local ConfigW = L:Window("Config", UDim2.new(0,150,0,30), UDim2.new(.05,0,.05,0))
+local ConfigW = L:Window("Config", UDim2.new(0,150,0,30), UDim2.new(.01,0,.05,0))
 ConfigW:Button("Unload", function()
     if L.gUI then
         L.gUI:Destroy()
