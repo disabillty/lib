@@ -112,22 +112,31 @@ function L:Window(title, size, pos)
     end
 
     function o:KeyButton(t, cbk)
-        local id = ControlId(winTitle,"KeyButton",t)
-        local b = Instance.new("TextButton"); b.Size=UDim2.new(1,0,0,btnH); b.BackgroundColor3=c60; b.Text=t; b.TextColor3=wh; b.Font=Enum.Font.SourceSans; b.TextSize=14; b.TextXAlignment=Enum.TextXAlignment.Center; b.Parent=c; b:SetAttribute("ControlId", id)
-        local kb = Instance.new("TextButton"); kb.Name="KeyBind"; kb.Size=UDim2.new(0,30,0,btnH); kb.Position=UDim2.new(1,0,0,0); kb.AnchorPoint=Vector2.new(1,0); kb.BackgroundColor3=c60; kb.TextColor3=wh; kb.Text="Key"; kb.Font=Enum.Font.SourceSans; kb.TextSize=14; kb.Parent=b
-        activeKeybinds[b] = {id=id, label=t}
-        local listening=false
-        kb.MouseButton1Click:Connect(function() listening=true; kb.Text="..." end)
-        local conn = ui.InputBegan:Connect(function(input)
-            if input.UserInputType==Enum.UserInputType.Keyboard then
-                if listening then kb.Text=input.KeyCode.Name; keybindData[id]=input.KeyCode.Name; b:SetAttribute("LoadedKeyBind", input.KeyCode.Name); listening=false
-                else if keybindData[id] and input.KeyCode.Name==keybindData[id] then if cbk then cbk() end end
-                end
-            end
-        end)
-        table.insert(connections, conn)
-        return b
-    end
+    local id = ControlId(winTitle,"KeyButton",t)
+    local b = Instance.new("TextButton")
+    b.Size, b.BackgroundColor3, b.Text, b.TextColor3, b.Font, b.TextSize, b.TextXAlignment, b.Parent = UDim2.new(1,0,0,btnH), c60, t, wh, Enum.Font.SourceSans, 14, Enum.TextXAlignment.Center, c
+    b:SetAttribute("ControlId", id)
+
+    local kb = Instance.new("TextButton")
+    kb.Name, kb.Size, kb.Position, kb.AnchorPoint, kb.BackgroundColor3, kb.TextColor3, kb.Text, kb.Font, kb.TextSize, kb.Parent =
+        "KeyBind", UDim2.new(0,30,0,btnH), UDim2.new(1,0,0,0), Vector2.new(1,0), c60, wh, "Key", Enum.Font.SourceSans, 14, b
+
+    activeKeybinds[b], listening = {id=id,label=t}, false
+    kb.MouseButton1Click:Connect(function() listening, kb.Text = true, "..." end)
+    b.MouseButton1Click:Connect(function() if cbk then cbk() end end)
+
+    local conn = ui.InputBegan:Connect(function(input)
+        if input.UserInputType==Enum.UserInputType.Keyboard then
+            if listening then
+                kb.Text, keybindData[id], listening = input.KeyCode.Name, input.KeyCode.Name, false
+                b:SetAttribute("LoadedKeyBind", input.KeyCode.Name)
+            elseif keybindData[id] and input.KeyCode.Name==keybindData[id] and cbk then cbk() end
+        end
+    end)
+    table.insert(connections, conn)
+    return b
+end
+
 
     function o:Toggle(t, cbk)
         local id = ControlId(winTitle,"Toggle",t)
